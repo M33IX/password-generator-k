@@ -146,6 +146,7 @@
             button1.TabIndex = 2;
             button1.Text = "Сгенерировать пароль";
             button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // button2
             // 
@@ -155,6 +156,7 @@
             button2.TabIndex = 2;
             button2.Text = "Проверить введенный пароль";
             button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // label1
             // 

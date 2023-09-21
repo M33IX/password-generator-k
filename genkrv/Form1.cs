@@ -17,5 +17,14 @@ namespace genkrv
             InitializeComponent();
         }
 
+        private void button1_Click(object sender, EventArgs e)
+        {
+            //Создать мехнизм забора данных с чекбоксов и отправки их в генератор
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            //Создать механизм проверки введенного пароля и обработки правил
+        }
     }
 }

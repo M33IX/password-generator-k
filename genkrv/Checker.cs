@@ -6,5 +6,6 @@ namespace genkrv
 {
     internal class Checker
     {
+        //Todo описать чекер
     }
 }
