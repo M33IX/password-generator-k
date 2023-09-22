@@ -9,121 +9,163 @@ namespace genkrv
     {
         //Todo протестить регулярки
 
-        short[] repeatsArray = new short[1500];
+        private short[] repeatsArray = new short[1500];
         //Посмотреть чар коды латиницы и оптимизировать массив
-        const string latinaP = @"^[A-Za-z]+$";
-        const string cyrP = @"^[А-Яа-я]+$";
+        const string latinaP = @"[A-Za-z]";
+        const string cyrP = @"[А-Яа-я]";
         const string digitsP = @"[0-9]";
-        const string specP = @"[!@#$%^&*()_\\-+<>?/\\[\\]{}\\.\\,\\=`~\\|\\\\\""]";
+        const string specP = @"[!#\$%&\(\)\*\+\-=\.,/<>?@\[\]\^_`\{\}\|~]";
         const string lowerLatinaP = @"[a-z]";
         const string lowerCyrP = @"[а-я]";
         const string upperLatinaP = @"[A-Z]";
         const string upperCyrP = @"[А-Я]";
         public bool check(byte rule, string password) {
-            short[] rules = new short[] { 1, 2, 4, 8, 16, 32, 64 };
+            short[] straightRules = new short[] { 1, 2, 4, 8, 16, 32, 64 };
+            short[] reverseRules = new short[] { 1, 2, 4, 8, 16, 32, 64 };
             Array.Fill(repeatsArray, (short) 0);
             short ruleSet = rule;
-            while (ruleSet > 0) {
-                for (int i = rules.Length - 1; i >= 0; i--) {
-                    if (rules[i] > ruleSet) continue;
-                    if (rules[i] <= ruleSet) {
-                        short currentRule = rules[i];
-                        ruleSet -= rules[i];
-                        rules[i] = 0;
-                        switch (currentRule) {
-                            case 1:
-                                if (!Regex.IsMatch(password, latinaP)) return false;
-                                break;
-                            case 2:
-                                if (!Regex.IsMatch(password, cyrP)) return false;
-                                break;
-                            case 4:
-                                if (!Regex.IsMatch(password, digitsP)) return false;
-                                break;
-                            case 8:
-                                if (!Regex.IsMatch(password, specP)) return false;
-                                break;
-                            case 16:
-                                if (rules[0] == rules[1]) {
-                                    if (!Regex.IsMatch(password, lowerLatinaP) || !Regex.IsMatch(password, lowerCyrP)) return false;
-                                    else { 
-                                        if (rules[0] == 0) if (!Regex.IsMatch(password, lowerLatinaP)) return false;
-                                        else if (!Regex.IsMatch(password, lowerCyrP)) return false;
-                                    }
-                                }
-                                break;
-                            case 32:
-                                if (rules[0] == rules[1])
-                                {
-                                    if (!Regex.IsMatch(password, upperLatinaP) || !Regex.IsMatch(password, upperCyrP)) return false;
-                                    else
-                                    {
-                                        if (rules[0] == 0) if (!Regex.IsMatch(password, upperLatinaP)) return false;
-                                            else if (!Regex.IsMatch(password, upperCyrP)) return false;
-                                    }
-                                }
-                                break;
-                            case 64:
-                                for (int x = 0; x < password.Length; x++) {
-                                    repeatsArray[(int)password[x]]++;
-                                }
-                                for (short x = 0; x < repeatsArray.Length; x++) { 
-                                    if (repeatsArray[x] > 1) return false;
-                                }
-                                break;
-                             default:
-                                break;
-                        }//Конец свича
-                    }//Конец вилки при совпадении условия
-                }//Конец цикла по массиву
-            }//Конец вайла
-            if (rules[4] != 0 && rules[5] != 0)
+            while (ruleSet > 0)
             {
-                rules[4] = 0;
-                rules[5] = 0;
-            } //Конец условия
-            for (short i = 0; i < rules.Length; i++) { 
-                switch (rules[i]) {
+                for (int i = straightRules.Length - 1; i >= 0; i--)
+                {
+                    if (straightRules[i] > ruleSet)
+                    {
+                        straightRules[i] = 0;
+                        continue;
+                    }
+                    if (straightRules[i] <= ruleSet)
+                    {
+                        ruleSet -= straightRules[i];
+                        reverseRules[i] = 0;
+                    }//Конец if
+                }//Конец for
+            }//Конец вайла
+            foreach (short straightRule in straightRules)
+            {
+                switch (straightRule)
+                {
                     case 1:
-                        if (Regex.IsMatch(password, latinaP)) return false;
+                        if (!Regex.IsMatch(password, latinaP)) return false;
                         break;
                     case 2:
-                        if (Regex.IsMatch(password, cyrP)) return false;
+                        if (!Regex.IsMatch(password, cyrP)) return false;
                         break;
                     case 4:
-                        if (Regex.IsMatch(password, digitsP)) return false;
+                        if (!Regex.IsMatch(password, digitsP)) return false;
                         break;
                     case 8:
                         if (!Regex.IsMatch(password, specP)) return false;
                         break;
                     case 16:
-                        if (rules[0] == rules[1])
+                        if ((straightRules[0] == straightRules[1]) || (straightRules[0] != 0 && straightRules[1] != 0))
                         {
-                            if (Regex.IsMatch(password, lowerLatinaP) || Regex.IsMatch(password, lowerCyrP)) return false;
-                            else
+                            if (!Regex.IsMatch(password, lowerLatinaP) || !Regex.IsMatch(password, lowerCyrP))
                             {
-                                if (rules[0] == 0) if (Regex.IsMatch(password, lowerLatinaP)) return false;
-                                    else if (Regex.IsMatch(password, lowerCyrP)) return false;
+                                return false;
                             }
                         }
+                        else if (straightRules[0] == 0)
+                        {
+                            if (Regex.IsMatch(password, lowerLatinaP)) return false;
+                        }
+                        else if (Regex.IsMatch(password, lowerCyrP)) return false;
                         break;
                     case 32:
-                        if (rules[0] == rules[1])
+                        if ((straightRules[0] == straightRules[1]) || (straightRules[0] != 0 && straightRules[1] != 0))
                         {
-                            if (Regex.IsMatch(password, upperLatinaP) || Regex.IsMatch(password, upperCyrP)) return false;
-                            else
+                            if (!Regex.IsMatch(password, upperLatinaP) || !Regex.IsMatch(password, upperCyrP))
                             {
-                                if (rules[0] == 0) if (Regex.IsMatch(password, upperLatinaP)) return false;
-                                    else if (Regex.IsMatch(password, upperCyrP)) return false;
+                                return false;
                             }
                         }
+                        else if (straightRules[0] == 0)
+                        {
+                            if (Regex.IsMatch(password, upperLatinaP)) return false;
+                        }
+                        else if (Regex.IsMatch(password, upperCyrP)) return false;
                         break;
                     case 64:
+                        {
+                            for (int x = 0; x < password.Length; x++)
+                            {
+                                repeatsArray[(int)password[x]]++;
+                            }
+                            foreach (short value in repeatsArray)
+                            {
+                                if (value > 1) return false;
+                            }
+                            break;
+                        }
+                    default:
+                        break;
+                }//Конец switch
+            }//Конец for обработки прямого порядка
+
+            if (reverseRules[4] != 0 && reverseRules[5] != 0)
+            {
+                reverseRules[4] = 0;
+                reverseRules[5] = 0;
+            }
+            foreach (byte reverseRule in reverseRules)
+            {
+                switch (reverseRule)
+                {
+                    case 1:
+                        if (Regex.IsMatch(password, latinaP))
+                        {
+                            return false;
+                        }
+                        break;
+                    case 2:
+                        if (Regex.IsMatch(password, cyrP))
+                        {
+                            return false;
+                        }
+                        break;
+                    case 4:
+                        if (Regex.IsMatch(password, digitsP))
+                        {
+                            return false;
+                        }
+                        break;
+                    case 8:
+                        if (Regex.IsMatch(password, specP))
+                        {
+                            return false;
+                        }
+                        break;
+                    case 16:
+                        if ((reverseRules[0] == reverseRules[1]) || (reverseRules[0] != 0 && reverseRules[1] != 0))
+                        {
+                            if (Regex.IsMatch(password, lowerLatinaP) || Regex.IsMatch(password, lowerCyrP))
+                            {
+                                return false;
+                            }
+                        }
+                        else if (reverseRules[0] == 0)
+                        {
+                            if (Regex.IsMatch(password, lowerLatinaP)) return false;
+                        }
+                        else if (Regex.IsMatch(password, lowerCyrP)) return false;
+                        break;
+                    case 32:
+                        if ((reverseRules[0] == reverseRules[1]) || (reverseRules[0] != 0 && reverseRules[1] != 0))
+                        {
+                            if (Regex.IsMatch(password, upperLatinaP) || Regex.IsMatch(password, upperCyrP))
+                            {
+                                return false;
+                            }
+                        }
+                        else if (reverseRules[0] == 0)
+                        {
+                            if (Regex.IsMatch(password, upperLatinaP)) return false;
+                        }
+                        else if (Regex.IsMatch(password, upperCyrP)) return false;
                         break;
                     default:
                         break;
-                }//Конец свича
-            }//Конец for
+                }//Конец switch
+            }//Конец for обработки обратного порядка
 
             return true;
         }

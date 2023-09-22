@@ -190,9 +190,8 @@
             label4.AutoSize = true;
             label4.Location = new System.Drawing.Point(12, 353);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(38, 15);
+            label4.Size = new System.Drawing.Size(0, 15);
             label4.TabIndex = 3;
-            label4.Text = "label1";
             // 
             // Form1
             // 
