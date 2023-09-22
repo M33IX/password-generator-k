@@ -118,7 +118,8 @@ namespace genkrv
                 }//Конец 
         }//Конец метода
 
-        public string generatePassword(short length, bool noRepeats) {
+        public string generatePassword(short length, bool noRepeats, byte rule) {
+            generateAlphabet(rule);
             StringBuilder password = new StringBuilder();
             Random random = new Random();
             if (noRepeats) {
