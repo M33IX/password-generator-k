@@ -18,6 +18,7 @@ namespace genkrv
             Generator generator = new Generator();
             while (true)
             {
+                //Генерим пароль и проверяем его, пока не подойдет
                 string pass = generator.generatePassword((short)length, (byte)rule);
                 if (checker.check((byte)rule, pass))
                 {
@@ -45,9 +46,11 @@ namespace genkrv
             if (checkBox5.Checked) rule += 16;
             if (checkBox6.Checked) rule += 32;
             if (checkBox7.Checked) rule += 64;
+            //Тянем значения с чекбоксов
 
             int length = Convert.ToInt32(textBox1.Text);
             textBox3.Text = makeGen(rule, length);
+            //Вызываем генератор пароля и передаем ему параметры
             label4.Text = "Пароль сгенерирован";
         }
 
@@ -61,9 +64,11 @@ namespace genkrv
             if (checkBox5.Checked) rule += 16;
             if (checkBox6.Checked) rule += 32;
             if (checkBox7.Checked) rule += 64;
+            //Собираем значения и вызываем чекер с параметрами
 
             if (makeCheck(rule, textBox2.Text))
             {
+                //Выводим ответ
                 label4.Text = "Пароль соответствует правилам";
             }
             else label4.Text = "Пароль не соответствует правилам";

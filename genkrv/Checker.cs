@@ -10,7 +10,7 @@ namespace genkrv
         //Todo протестить регулярки
 
         private short[] repeatsArray = new short[1500];
-        //Посмотреть чар коды латиницы и оптимизировать массив
+        //Паттерны проверки
         const string latinaP = @"[A-Za-z]";
         const string cyrP = @"[А-Яа-я]";
         const string digitsP = @"[0-9]";
@@ -20,10 +20,12 @@ namespace genkrv
         const string upperLatinaP = @"[A-Z]";
         const string upperCyrP = @"[А-Я]";
         public bool check(byte rule, string password) {
+            //Массивы для прямой и обратной проверки
             short[] straightRules = new short[] { 1, 2, 4, 8, 16, 32, 64 };
             short[] reverseRules = new short[] { 1, 2, 4, 8, 16, 32, 64 };
             Array.Fill(repeatsArray, (short) 0);
             short ruleSet = rule;
+            //Парсим массив
             while (ruleSet > 0)
             {
                 for (int i = straightRules.Length - 1; i >= 0; i--)
@@ -40,6 +42,7 @@ namespace genkrv
                     }//Конец if
                 }//Конец for
             }//Конец вайла
+            //Проходим и проверяем пароль по правилам
             foreach (short straightRule in straightRules)
             {
                 switch (straightRule)
@@ -86,6 +89,7 @@ namespace genkrv
                         break;
                     case 64:
                         {
+                            //Проверяем на повторы
                             for (int x = 0; x < password.Length; x++)
                             {
                                 repeatsArray[(int)password[x]]++;
@@ -101,6 +105,7 @@ namespace genkrv
                 }//Конец switch
             }//Конец for обработки прямого порядка
 
+            //Обратная проверка в том же порядке (но без повторов)
             if (reverseRules[4] != 0 && reverseRules[5] != 0)
             {
                 reverseRules[4] = 0;

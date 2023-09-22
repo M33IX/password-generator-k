@@ -9,6 +9,7 @@ namespace genkrv
 {
     internal class Generator
     {
+        //Составные алфавита (латиница, кириллица, цифры и т.д)
         private const string latinaL = "abcdefghijklmnopqrstuvwxyz";
         private const string latinaU = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
         private const string cyrL = "абвгдеёжзийклмнопрстуфхцчшщъьыэюя";
@@ -20,15 +21,18 @@ namespace genkrv
 
         private string alphabet = "";
 
+        //Переменная, отвечающая за повторы
         private bool noRepeats = false;
 
         public byte alphabetLength() { 
             return Convert.ToByte(alphabet.Length);
         }
+
         private void generateAlphabet(byte rule) {
             alphabet = "";
             byte[] rules = new byte[] { 1, 2, 4, 8, 16, 32, 64 };
             short ruleSet = rule;
+            //Парсим
             while (ruleSet > 0) {
                 for (int i = rules.Length - 1; i >= 0; i--)
                 {
@@ -36,6 +40,7 @@ namespace genkrv
                     if (rules[i] <= ruleSet) ruleSet -= rules[i];
                 }
             }
+            //Собираем алфавит по правилам
                 for (int i = 0; i < rules.Length; i++)
                 {
                     switch (rules[i])
@@ -75,6 +80,7 @@ namespace genkrv
                             alphabet += spec;
                             break;
                         case 64:
+                        //Включаем повторы, если падает такое правило
                             noRepeats = true;
                         break;
                         default:
@@ -84,27 +90,27 @@ namespace genkrv
         }//Конец метода
 
         public string generatePassword(short length, byte rule) {
-            generateAlphabet(rule);
-            if (length > alphabetLength()) length = alphabetLength();
+            generateAlphabet(rule); //Генерим алфавит
+            if (length > alphabetLength()) length = alphabetLength(); //Если длина пароля больше длины алфавита, то задаем мощность алфавита максимальной длиной пароля
             StringBuilder password = new StringBuilder();
             Random random = new Random();
-            if (noRepeats) {
-                HashSet<char> usedChars = new HashSet<char>();
+            if (noRepeats) { //Смотрим на повторы
+                HashSet<char> usedChars = new HashSet<char>(); //создание хэшсета
                 for (int i = 0; i < length; i++)
                 {
                     int index = random.Next(alphabetLength());
-                    char nextChar = alphabet[index];
-                    if (!usedChars.Contains(nextChar))
+                    char nextChar = alphabet[index];//Берем рандомный символ
+                    if (!usedChars.Contains(nextChar)) //Чекаем наличие его в хэшсете
                     {
-                        password.Append(alphabet[index]);
-                        usedChars.Add(nextChar);
+                        password.Append(alphabet[index]); //Если нет, то збс кладем в пароль
+                        usedChars.Add(nextChar); // и в хэшсет
                     }
                 }
             }
             else { 
             for (int i = 0; i < length; i++)
             {
-                int index = random.Next(alphabetLength());
+                int index = random.Next(alphabetLength()); //Обычная генерация с повторами
                 char nextChar = alphabet[index];
                 password.Append(alphabet[index]);
             } 
