@@ -11,10 +11,10 @@ namespace genkrv
 
         short[] repeatsArray = new short[1500];
         //Посмотреть чар коды латиницы и оптимизировать массив
-        const string latinaP = @"^[A-Za-z]+$";
-        const string cyrP = @"^[А-Яа-я]+$";
+        const string latinaP = @"[A-Za-z]";
+        const string cyrP = @"[А-Яа-я]";
         const string digitsP = @"[0-9]";
-        const string specP = @"[!@#$%^&*()_\\-+<>?/\\[\\]{}\\.\\,\\=`~\\|\\\\\""]";
+        const string specP = @"[!#\$%&\(\)\*\+\-=\.,/<>?@\[\]\^_`\{\}\|~]";
         const string lowerLatinaP = @"[a-z]";
         const string lowerCyrP = @"[а-я]";
         const string upperLatinaP = @"[A-Z]";
@@ -94,7 +94,7 @@ namespace genkrv
                         if (Regex.IsMatch(password, digitsP)) return false;
                         break;
                     case 8:
-                        if (!Regex.IsMatch(password, specP)) return false;
+                        if (Regex.IsMatch(password, specP)) return false;
                         break;
                     case 16:
                         if (rules[0] == rules[1])

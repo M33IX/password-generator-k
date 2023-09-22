@@ -127,7 +127,7 @@
             // 
             textBox2.Location = new System.Drawing.Point(12, 235);
             textBox2.Name = "textBox2";
-            textBox2.Size = new System.Drawing.Size(100, 23);
+            textBox2.Size = new System.Drawing.Size(176, 23);
             textBox2.TabIndex = 1;
             // 
             // textBox3
@@ -150,7 +150,7 @@
             // 
             // button2
             // 
-            button2.Location = new System.Drawing.Point(253, 309);
+            button2.Location = new System.Drawing.Point(344, 309);
             button2.Name = "button2";
             button2.Size = new System.Drawing.Size(181, 35);
             button2.TabIndex = 2;
@@ -170,7 +170,7 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new System.Drawing.Point(118, 238);
+            label2.Location = new System.Drawing.Point(194, 238);
             label2.Name = "label2";
             label2.Size = new System.Drawing.Size(171, 15);
             label2.TabIndex = 3;
@@ -190,9 +190,8 @@
             label4.AutoSize = true;
             label4.Location = new System.Drawing.Point(12, 353);
             label4.Name = "label4";
-            label4.Size = new System.Drawing.Size(38, 15);
+            label4.Size = new System.Drawing.Size(0, 15);
             label4.TabIndex = 3;
-            label4.Text = "label1";
             // 
             // Form1
             // 
